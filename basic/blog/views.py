@@ -12,7 +12,6 @@ from basic.blog.models import *
 from basic.tools.constants import STOP_WORDS_RE
 from tagging.models import Tag, TaggedItem
 
-
 def post_list(request, page=0, paginate_by=20, **kwargs):
     page_size = getattr(settings,'BLOG_PAGESIZE', paginate_by)
     return list_detail.object_list(
@@ -64,7 +63,7 @@ post_archive_day.__doc__ = date_based.archive_day.__doc__
 
 def post_detail(request, slug, year, month, day, **kwargs):
     """
-    Displays post detail. If user is superuser, view will display 
+    Displays post detail. If user is superuser, view will display
     unpublished post detail for previewing purposes.
     """
     posts = None
@@ -146,7 +145,7 @@ def tag_detail(request, slug, template_name = 'blog/tag_detail.html', **kwargs):
     )
 
 
-def search(request, template_name='blog/post_search.html'):
+def search(request, template_name='blog/post_search.html', extra_context=None):
     """
     Search for blog posts.
 
@@ -173,4 +172,7 @@ def search(request, template_name='blog/post_search.html'):
         else:
             message = 'Search term was too vague. Please try again.'
             context = {'message':message}
+
+	extra_context = extra_context or {}
+	context.update(extra_context)
     return render_to_response(template_name, context, context_instance=RequestContext(request))
