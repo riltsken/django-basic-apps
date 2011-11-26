@@ -12,11 +12,11 @@ from basic.blog.models import *
 from basic.tools.constants import STOP_WORDS_RE
 from tagging.models import Tag, TaggedItem
 
-def post_list(request, page=0, paginate_by=20, **kwargs):
+def post_list(request, page=0, paginate_by=20, queryset=None, **kwargs):
     page_size = getattr(settings,'BLOG_PAGESIZE', paginate_by)
     return list_detail.object_list(
         request,
-        queryset=Post.objects.published(),
+        queryset=queryset or Post.objects.published(),
         paginate_by=page_size,
         page=page,
         **kwargs
